@@ -24,9 +24,12 @@ Supported version: 1.4 (2009)
 Features:
 
 * POSIX-compliant
+* Supports and ignores inline comment using semicolon '`;`', hashmark '`#`', and double-slash '`//`'
 * loads all settings into bash string (no variable array)
 * Treats no-section as '`[Default]`';  reads both sections together as one.
-* 30,000 keyvalue lookup per second.  (well, like performance matters anyway)
+* Check the section name and keyword name for valid character set.
+* Nested quotes also works alongside with inline comment (except for '//' inline comment support)
+* 30,000 keyvalue lookup per second.  (well, like performance really matters here anyway)
 
 Demo
 ====
