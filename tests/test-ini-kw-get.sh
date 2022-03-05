@@ -3,13 +3,15 @@
 . ../bash-ini-parser.sh
 
 assert_kw_get_raw() {
+  local raw_file section kw expected note retstt
   raw_file=$1
   section=$2
   kw=$3
   expected=$4
   note=$5
   ini_keyword_valid "$kw"
-  if [ $? -eq 0 ]; then
+  retsts=$?
+  if [ $retsts -eq 0 ]; then
     echo "invalid keyword: '$kw'; aborted"
     exit 0
   fi
@@ -36,7 +38,8 @@ assert_kw_get() {
   expected=$4
   note=$5
   ini_keyword_valid "$kw"
-  if [ $? -eq 0 ]; then
+  retsts=$?
+  if [ $retsts -eq 0 ]; then
     echo "invalid keyword: '$kw'; aborted"
     exit 0
   fi

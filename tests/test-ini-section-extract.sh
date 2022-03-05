@@ -70,7 +70,7 @@ assert_section_extract "$ini_buffer" "Resolve" \
 [Resolve]DNS=1.1.1.1
 [Resolve]FallbackDNS=" "simple"
 
-ini_buffer2="""[Machine1]
+ini_buffer2="[Machine1]
 
 app=version1
 
@@ -85,7 +85,7 @@ app=version2
 
 app=version1
 app=version3
-"""
+"
 assert_section_extract "$ini_buffer2" "Machine1" "[Machine1]app=version1" "StackOverflow"
 echo
 

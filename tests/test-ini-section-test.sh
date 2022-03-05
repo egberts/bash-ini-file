@@ -39,7 +39,6 @@ DATA_EOF
 
 
 assert_section_test() {
-  local ini_buffer sec expected note result
   ini_buffer=$1
   sec=$2
   expected=$3

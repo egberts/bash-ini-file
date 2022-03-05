@@ -7,7 +7,7 @@ ini_filespec="/etc/systemd/system/display-manager.service"
 section="Service"
 keyword="ExecStart"
 
-source bash-ini-parser.sh
+. ./bash-ini-parser.sh
 
 raw_data="$(cat $ini_filespec)"
 
