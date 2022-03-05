@@ -1,7 +1,7 @@
 # bash-ini-file
-Extract keyvalues from section/keyword from INI-format (v1.4) file in bash
+Extract keyvalues from section/keyword from [INI-format (v1.4)](https://cloanto.com/specs/ini/#escapesequences) file in bash.
 
-You got an INI file, I've got the bash script to get your settings.
+You got an INI file, I've got the bash script to get your settings from.
 
 Works with:
 
@@ -9,6 +9,7 @@ Works with:
 * NetworkManager configuration file
 * ifup/down configuration file
 * PHP configuration file
+* Windows .INI
 
 Treats no-section as '`[Default]`';  reads both sections together as one.
 
