@@ -1,7 +1,7 @@
 # bash-ini-file
-Extract keyvalues from section/keyword from INI-format (v1.4) file in bash
+Extract keyvalues from section/keyword from [INI-format (v1.4)](https://cloanto.com/specs/ini/#escapesequences) file in bash.
 
-You got an INI file, I've got the bash script to get your settings.
+You got an INI file, I've got the bash script to get your settings from.
 
 Works with:
 
@@ -9,6 +9,7 @@ Works with:
 * NetworkManager configuration file
 * ifup/down configuration file
 * PHP configuration file
+* Windows .INI
 
 Treats no-section as '`[Default]`';  reads both sections together as one.
 
@@ -23,9 +24,12 @@ Supported version: 1.4 (2009)
 Features:
 
 * POSIX-compliant
+* Supports and ignores inline comment using semicolon '`;`', hashmark '`#`', and double-slash '`//`'
 * loads all settings into bash string (no variable array)
 * Treats no-section as '`[Default]`';  reads both sections together as one.
-* 30,000 keyvalue lookup per second.  (well, like performance matters anyway)
+* Check the section name and keyword name for valid character set.
+* Nested quotes also works alongside with inline comment (except for '//' inline comment support)
+* 30,000 keyvalue lookup per second.  (well, like performance really matters here anyway)
 
 Demo
 ====
