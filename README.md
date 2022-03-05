@@ -12,7 +12,7 @@ Works with:
 
 Treats no-section as '`[Default]`';  reads both sections together as one.
 
-Also correctly finds the last keyword of the desired section before extracting its keyvalue, despite multiply-reused section blocks.
+Also correctly finds the last keyword of the desired section before extracting its keyvalue, despite multiply-defined/multiple-reused section blocks.
 
 Details
 =======
