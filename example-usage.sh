@@ -3,11 +3,23 @@
 # Title: Demo of bash-ini-parser.sh
 # 
 
+ini_filespec="/etc/systemd/system/display-manager.service"
+section="Service"
+keyword="ExecStart"
+
 source bash-ini-parser.sh
 
-my_raw="$(cat /etc/systemd/system/display-manager.service)"
+raw_data="$(cat $ini_filespec)"
 
-my_ini="$(ini_file_read "$my_ini")"
+ini_settings="$(ini_file_read "$raw_data")"
 
-ini_kw_get "$my_ini" "Service" "ExecStart"
+keyvalue="$(ini_kw_get "$ini_settings" "$section" "$keyword")"
 
+echo "File    : $ini_filespec"
+echo "Keyword : $keyword"
+echo "Keyvalue: $keyvalue  # <--- your section/keyword/keyvalue answer"
+echo
+echo "Came from all that below:"
+echo "\"$ini_settings\""
+echo
+echo "Done."

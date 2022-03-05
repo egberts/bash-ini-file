@@ -202,11 +202,11 @@ ini_kw_get()
   #
   #
   # into BASH, for now, do simple removal of inline comment
-  kv="$(echo "$kv" | sed "/^\s*;/d;s/\s*;[^\"']*$//")"
-  # echo "kv2: $kv"
-  kv="$(echo "$kv" | sed "/^\s*#/d;s/\s*#[^\"']*$//")"
-  # echo "kv4: $kv"
-  kv="$(echo "$kv" | sed "/^\s*\/\//d;s/\s*\/\/[^\"']*$//")"
+#  kv="$(echo "$kv" | sed "/^\s*;/d;s/\s*;[^\"']*$//")"
+#  # echo "kv2: $kv"
+#  kv="$(echo "$kv" | sed "/^\s*#/d;s/\s*#[^\"']*$//")"
+#  # echo "kv4: $kv"
+#  kv="$(echo "$kv" | sed "/^\s*\/\//d;s/\s*\/\/[^\"']*$//")"
   # echo "kv5: $kv"
 
   # remove surrounding whitespaces
