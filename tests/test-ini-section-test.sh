@@ -39,16 +39,39 @@ DATA_EOF
 
 
 assert_section_test() {
+  local ini_buffer section expected note
   ini_buffer=$1
-  sec=$2
+  section=$2
   expected=$3
   note=$4
-  result="$(ini_section_test "$ini_buffer" "$sec")"
-  if [ "$result" = "$expected" ]; then
-    echo "assert_section_test('$sec'): found: passed: # $note"
-  else
-    echo "assert_section_test('$sec'): NOT FOUND # $note"
+  result="$(ini_section_test "$ini_buffer" "$section")"
+  retsts=$?
+  if [ -n "$result" ]; then
+    printf "assert_section_test('%s'): UNEXPECTED STDOUT: # %s\n" \
+           "$section" "$note" >&2
     echo "Aborted."
+    exit 1
+  fi
+  printf "assert_section_test('$s'): " "$section" >&2
+  if [ "$expected" == '1' ]; then
+    if [ $retsts -ne 0 ]; then
+      printf "passed: # %s\n" "$note" >&2
+    else
+      printf "unexpectedly FAILED: # %s\n" "$note" >&2
+      echo "Aborted."
+      exit 1
+    fi
+  elif [ "$expected" == '0' ]; then
+    if [ $retsts -eq 0 ]; then
+      printf "expectedly FAILED: # %s\n" "$note" >&2
+    else
+      printf "unexpectedly PASSED: # %s\n" "$note" >&2
+      echo "Aborted." >&2
+      exit 1
+    fi
+  else
+    printf "wrong expected value (must be 0 or 1): # %s\n" "$note" >&2
+    echo "Aborted." >&2
     exit 1
   fi
 }

@@ -4,17 +4,17 @@
 
 # Syntax: assert_file_read <raw_buffer> <expected_string> <unittest_note>
 assert_file_read() {
-  local raw_buffer sec expected note result
+  local raw_buffer expected note result ini_buffer
   raw_buffer=$1
   expected=$2
   note=$3
   ini_buffer="$(ini_file_read "$raw_buffer")"
+  printf "assert_file_read(): "
   if [ "$ini_buffer" = "$expected" ]; then
-    echo "assert_file_read(): found: passed: # $note"
+    printf "passed: # %s\n" "$note"
   else
-    echo "assert_file_read(): NOT FOUND # $note"
-    echo "  expected: \"${expected}\""
-    echo "  result:   \"${ini_buffer}\""
+    printf "fail: # %s\n  expected: %s\n  actual:   %s\n" \
+           "$note" "$expected" "$ini_buffer"
     echo "Aborted."
     exit 1
   fi

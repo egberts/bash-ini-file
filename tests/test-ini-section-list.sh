@@ -8,12 +8,11 @@ assert_section_list() {
   note=$3
   ini_buffer="$(ini_file_read "$raw_file")"
   result="$(ini_section_list "$ini_buffer")"
-  echo "section: $result"
+  printf "assert_section_list(): '%s' " "$result" >&2
   if [ "$result" = "$expected" ]; then
-    echo "assert_section_list(): found: passed: # $note"
+    printf "passed: # %s\n" "$note" >&2
   else
-    echo "assert_section_list(): NOT FOUND # $note"
-    echo "Aborted."
+    printf "FAILED: NOT FOUND # %s\n" "$note" >&2
     exit 0
   fi
 }

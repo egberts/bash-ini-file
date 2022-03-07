@@ -3,38 +3,36 @@
 . ../bash-ini-parser.sh
 
 assert_keyword_valid() {
-  kw="$1"
+  local keyword expected note
+  keyword="$1"
   expected="$2"
   note="$3"
-  echo -n "assert_keyword_valid('${kw}'): "
-  result="$(echo "$kw" | ini_keyword_valid "$kw")"
+  ini_keyword_valid "$keyword"
   retsts=$?
+  if [ -n "$result" ]; then
+    echo "FAIL: Unexpected STDOUT: $result"
+    exit 15
+  fi
+  echo -n "assert_keyword_valid('${keyword}'): "
   if [ "$expected" == "1" ]; then
     if [ $retsts -eq 1 ]; then
-      if [ -n "$result" ]; then
-        echo "FAIL: Unexpected VALID OUTPUT: $result"
-	exit 15
-      else
-        echo "pass	# $note"
-      fi
+      printf "pass	# %s\n" "$note"
     else
-      echo "expected valid but FAIL: $result	# $note"
+      printf "FAIL: INVALID errno # %s\n  expected: '%s'\n  actual  : '%s'\n" \
+          "$note" "" "$result"
       echo "Aborted."
-      exit 0
+      exit 1
     fi
   else
     if [ $retsts -eq 0 ]; then
-      echo "expectedly invalid '$result'"
-      if [ -z "$result" ]; then
-        echo "FAIL: MISSING RESULT field; aborted."
-	exit 16
-      else
-        echo "pass.	# $note"
-      fi
+      printf "correct errno: "
+      printf "expectedly failed # %s\n" "$note"
     else
-      echo "FAIL: UNEXPECTEDLY valid $result	# $note"
+      printf "INVALID errno: "
+      printf "unexpectedly PASS: INVALID errno # %s\n  expected: '%s'\n  actual  : '%s'\n" \
+          "$note" "" "$result"
       echo "Aborted."
-      exit 0
+      exit 1
     fi
   fi
 }

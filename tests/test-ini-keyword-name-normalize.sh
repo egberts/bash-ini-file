@@ -3,29 +3,31 @@
 . ../bash-ini-parser.sh
 
 assert_keyword_normalize() {
-  local kw expected pass note result
-  kw=$1
+  local keyword expected pass note result
+  keyword=$1
   expected=$2
   pass=$3
   note=$4
-  echo -n "assert_keyword_normalize('${kw}'): "
-  result="$(echo "$kw" | ini_keyword_normalize "$kw")"
-  if [ "$result" == "$kw" ]; then
+  printf "assert_keyword_normalize('%s'): " "$keyword"
+  result="$(echo "$keyword" | ini_keyword_name_normalize "$keyword")"
+  retsts=$?
+  if [ "$result" == "$keyword" ]; then
+    printf "unchanged: "
     if [ "$pass" == '1' ]; then
-      echo "pass: got: '$result'"
+      printf "pass # %s\n" "$note"
     else
-      echo "UNEXPECTEDLY FAIL"
-      echo " expected: '$expected'"
-      echo " result: '$result'"
+      printf "UNEXPECTEDLY FAIL # %s\n  expected: '%'\n  actual  : '%s'\n" \
+           "$note" "$expected" "$result"
+      echo "Aborted"
       exit 1
     fi
   else
+    printf "got modified: "
     if [ "$pass" == '0' ]; then
-      echo "expectedly fail: got: '$result'"
+      echo "expectedly fail: # %s\n" "$note"
     else
-      echo "UNEXPECTEDLY FAILED"
-      echo " expected: '$expected'"
-      echo " result: '$result'"
+      printf "UNEXPECTEDLY PASSED # %s\n  expected: '%s'\n  actual  : '%s'\n" \
+             "$note" "$expected" "$result"
       exit 1
     fi
   fi
