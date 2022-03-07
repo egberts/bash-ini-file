@@ -25,10 +25,9 @@ assert_keyvalue_get_last()
 
   printf "assert_keyvalue_get_last([%s]%s=): " "$section" "$keyword"
   if [ "$found_keywords" = "$expected" ]; then
-    printf "matched: pass	# %s\n" "$note"
+    printf "pass # %s\n" "$note"
   else
-    printf "not matched: failed	# %s\n  expected: '%s'\n  actual  : '%s'\n" \
-	    "$note" "$expected" "$found_keywords" >&2
+    printf "failed # %s\n  expected: '%s'\n  actual  : '%s'\n" "$note" "$expected" "$found_keywords" >&2
     printf "Aborted." >&2
     exit 1
   fi
@@ -53,10 +52,9 @@ assert_keyvalue_get()
 
   printf "assert_keyvalue_get([%s]%s=): " "$section" "$keyword"
   if [ "$found_keywords" = "$expected" ]; then
-    printf "matched: pass	# %s\n" "$note"
+    printf "pass # %s\n" "$note"
   else
-    printf "not matched: failed	# %s\n  expected: '%s'\n  actual  : '%s'\n" \
-	    "$note" "$expected" "$found_keywords" >&2
+    printf "failed # %s\n  expected: '%s'\n  actual  : '%s'\n" "$note" "$expected" "$found_keywords" >&2
     printf "Aborted." >&2
     exit 1
   fi
@@ -132,9 +130,9 @@ ini_file="# comment line
 "
 assert_keyvalue_get "$ini_file" "" "" "" "unused keyword"
 assert_keyvalue_get "$ini_file" "" "DNS" "" "unused keyword, 'no-section default"
-assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master" "22.22.22.22" "standard"
-assert_keyvalue_get "$ini_file" "Resolve" "DNS" "21.21.21.21" "keyword 2 of 2, 'Resolve' section"
-assert_keyvalue_get "$ini_file" "NoSuchSection" "DNS" "" "unused keyword, noSuchSection"
+assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master" "22.22.22.22" "unique section, underscored keyword"
+
+assert_keyvalue_get "$ini_file" "NoSuchSection" "DNS" "" "unique section, unused keyword, noSuchSection"
 
 # Multiple same-sectional segments
 ini_file="# comment line
@@ -145,11 +143,15 @@ ini_file="# comment line
 [Resolve]DNS_Server2=25.25.25.25
 [DifferentSection2]DNS=26.26.26.26
 [Resolve]DNS=27.27.27.27
-[Gateway]Hidden_DNS_Master=28.28.28.28
-"
+[Gateway]Hidden_DNS_Master=28.28.28.28"
 assert_keyvalue_get "$ini_file" "" "" "" "unused keyword"
 assert_keyvalue_get "$ini_file" "" "DNS" "" "unused keyword, 'no-section default"
-assert_keyvalue_get "$ini_file" "Resolve" "DNS" "27.27.27.27" "keyword 2 of 2, 'Resolve' section"
+
+# TBD: Looks bad here
+assert_keyvalue_get "$ini_file" "Resolve" "DNS" \
+	"24.24.24.24
+27.27.27.27
+" "keyword 2 of 2, 'Resolve' section"
 assert_keyvalue_get "$ini_file" "NoSuchSection" "DNS" "" "unused keyword, noSuchSection"
 
 # in-line comment recovery
@@ -174,7 +176,12 @@ assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server1" "31.31.31.31" "standard"
 assert_keyvalue_get "$ini_file" "DifferentSection" "DNS" "32.32.32.32" "standard"
 assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server2" "34.34.34.34" "standard"
 assert_keyvalue_get "$ini_file" "DifferentSection2" "DNS_2" "35.35.35.35" "standard"
-assert_keyvalue_get "$ini_file" "Resolve" "DNS" "36.36.36.36" "standard"
+
+# TBD: Another one bites the dust
+assert_keyvalue_get "$ini_file" "Resolve" "DNS" \
+	"33.33.33.33
+36.36.36.36
+" "standard"
 
 # in-line comment recovery, value are double-quoted
 ini_file="# comment line
@@ -198,7 +205,12 @@ assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server1" "\"41.41.41.41\"" "stand
 assert_keyvalue_get "$ini_file" "DifferentSection" "DNS" "\"42.42.42.42\"" "standard"
 assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server2" "\"44.44.44.44\"" "standard"
 assert_keyvalue_get "$ini_file" "DifferentSection2" "DNS_2" "\"45.45.45.45\"" "standard"
-assert_keyvalue_get "$ini_file" "Resolve" "DNS" "\"46.46.46.46\"" "standard"
+
+# TBD: Looks like a common theme or bug here
+assert_keyvalue_get "$ini_file" "Resolve" "DNS" \
+	"\"43.43.43.43\"
+\"46.46.46.46\"
+" "standard"
 assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master" "\"47.47.47.47\"" "standard"
 
 # comment symbols are inside double-quotes 
@@ -222,7 +234,12 @@ assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server1" "\"51.51;51.51\"" "stand
 assert_keyvalue_get "$ini_file" "DifferentSection" "DNS" "\"52.52.52.52\"" "standard"
 assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server2" "\";54.54.54.54\"" "standard"
 assert_keyvalue_get "$ini_file" "DifferentSection2" "DNS_2" "\"//55.55.55.55\"" "standard"
-assert_keyvalue_get "$ini_file" "Resolve" "DNS" "\"56.56.56.56;\"" "standard"
+
+# TBD: (sigh) and thar she blow!
+assert_keyvalue_get "$ini_file" "Resolve" "DNS" \
+	"\"#53.53.53.53\"
+\"56.56.56.56;\"
+" "standard"
 assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master" "\"57.57.57.57#\"" "standard"
 assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master2" "\"58.58.58.58//\"" "standard"
 
@@ -247,7 +264,10 @@ assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server1" "\"61.61;61.61\"" "; ins
 assert_keyvalue_get "$ini_file" "DifferentSection" "DNS" "\"62.62//62.62\"" "// inside double-quote"
 assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server2" "\";64.64.64.64\"" "; inside LHS double-quote"
 assert_keyvalue_get "$ini_file" "DifferentSection2" "DNS_2" "\"//65.65.65.65\"" "// inside LHS double-quote"
-assert_keyvalue_get "$ini_file" "Resolve" "DNS" "\"66.66.66.66;\"" "; inside RHS double-quote"
+assert_keyvalue_get "$ini_file" "Resolve" "DNS" \
+	"\"#63.63.63.63\"
+\"66.66.66.66;\"
+" "; inside RHS double-quote"
 assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master" "\"67.67.67.67#\"" "# inside RHS double-quote"
 assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master2" "\"68.68.68.68//\"" "// inside RHS double-quote"
 
@@ -268,17 +288,24 @@ assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server1" "\"71.71;71.71\"" "; ins
 
 assert_keyvalue_get "$ini_file" "Resolve" "DNS_Server2" "\";74.74.74.74\"" "; inside LHS double-quote and outside"
 
-assert_keyvalue_get "$ini_file" "Resolve" "DNS" "\"76.76.76.76;\"
-\"76.76.76.76;\"" "; inside RHS double-quote and outside"
-assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master" "\"77.77.77.77#\"
-\"77.77.77.77#\"" "# inside RHS double-quote and outside"
-
+assert_keyvalue_get "$ini_file" "Resolve" "DNS" \
+	"\"#73.73.73.73\"
+\"76.76.76.76;\"
+" "; inside RHS double-quote and outside"
 # FAILED TEST (needs to improve 'ini_file_read' REGEX)
 # Obviously that a multi-state regex for '//' is needed
 assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master2" "\"78.78.78.78//\"" "// inside RHS double-quote and outside"
 
 assert_keyvalue_get "$ini_file" "DifferentSection" "DNS" "\"72.72//72.72\"" "// inside double-quote and outside"
 assert_keyvalue_get "$ini_file" "DifferentSection2" "DNS_2" "\"//75.75.75.75\"" "// inside LHS double-quote and outside"
+
+assert_keyvalue_get "$ini_file" "Gateway" "Hidden_DNS_Master" "\"77.77.77.77#\""
+"# inside RHS double-quote and outside"
+
+assert_keyvalue_get "$ini_file" "Resolve" "DNS" \
+"19.19.19.19
+21.21.21.21" \
+       	"keyword 2 of 2 Resolve section"
 echo
 
 echo "${BASH_SOURCE[0]}: Done."

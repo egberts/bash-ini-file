@@ -10,7 +10,7 @@ assert_keyword_list()
   expected=$3
   note=$4
   ini_buf_by_section="$(ini_section_extract "$ini_buffer" "$section")"
-  result="$(ini_keyword_list "$ini_buf_by_section")"
+  result="$(ini_keyword_list "$ini_buf_by_section" "$section")"
   printf "assert_keyword_list([%s]): " "$section" >&2
   if [ "$result" = "$expected" ]; then
     printf "passed: # %s\n" "$note" >&2
@@ -30,7 +30,7 @@ assert_keyword_list_raw()
   note=$4
   ini_buffer="$(ini_file_read "$raw_file")"
   ini_buf_by_section="$(ini_section_extract "$ini_buffer" "$section")"
-  result="$(ini_keyword_list "$ini_buf_by_section")"
+  result="$(ini_keyword_list "$ini_buf_by_section" "$section")"
   printf "assert_keyword_list_raw([%s]): " "$section" >&2
   if [ "$result" == "$expected" ]; then
     printf "passed: # %s\n" "$note" >&2

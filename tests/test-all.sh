@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # echo "Unit-test section-regex.sh bash module"
 
@@ -10,8 +10,9 @@
 . ./test-ini-keyword-normalize.sh
 . ./test-ini-keyword-valid.sh
 . ./test-ini-keyword-list.sh
-. ./test-ini-kv-get.sh
+. ./test-ini-keyvalue-get.sh
 . ./test-ini-kv-get-last.sh
 echo ""
 
 echo "${BASH_SOURCE[0]}: Done."
+

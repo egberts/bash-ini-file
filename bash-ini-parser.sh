@@ -380,13 +380,13 @@ ini_keyvalue_get()
   kv="$(echo "$kv" | sed -- 's/^\s*//')"
 #  kv="$(echo "$kv" | sed -- 's/\s*$//')"
 
-  printf "ikvg: kv: '%s'\n" "$kv" >&2
+  # printf "ikvg: kv: '%s'\n" "$kv" >&2
   # Remove '[section]keyword='
   IFS= read -rd '' final_kv < <(awk -F= 'RS= NF == 2 {print $2}' <<< "$kv")
   if [ "${#final_kv}" -ge 1 ]; then
     final_kv="${final_kv:0: -1}"
   fi
-  printf "ikvg: fkv: '%s'\n" "$final_kv" >&2
+  # printf "ikvg: fkv: '%s'\n" "$final_kv" >&2
 
   printf "%s" "$final_kv"
 }
