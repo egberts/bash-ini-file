@@ -1,5 +1,7 @@
+Get that keyvalue from INI!
+
 # bash-ini-file
-Extract any keyvalues by its section/keyword from an [INI-format (v1.4)](https://cloanto.com/specs/ini/#escapesequences) file in bash.
+From an [INI-format (v1.4)](https://cloanto.com/specs/ini/#escapesequences) file, be able to extract any keyvalue by its section/keyword ... in `bash`.
 
 You got an INI file, I've got the bash script in which to get your settings from with.
 
