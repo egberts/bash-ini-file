@@ -248,6 +248,6 @@ assert_keyvalue_get([Gateway]Hidden_DNS_Master2=): failed # // inside RHS double
   actual  : '"78.78.78.78//"  // inline '/' '/' RHS double-quote'
 ```
 
-
+Oh, please disregard the `failed` at the last line for I have filed [`Issue 1`](https://github.com/egberts/bash-ini-file/issues/1).
 
 
