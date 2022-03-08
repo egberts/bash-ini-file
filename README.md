@@ -15,6 +15,49 @@ Treats a no-section (any `keyword=keyvalue` before a `[section]`) as a '`[Defaul
 
 Also correctly finds the last keyvalue of the desired section/keyword before extracting its keyvalue, despite its multiply-defined/multiple-reused interspersed/alternating section blocks.
 
+HOW I DID THIS
+==============
+
+The secret sauce is to convert the entire INI file into a parsable syntax format with one `awk`:
+
+```awk
+/^\[.*\]$/{obj=$0}/=/{print obj $0}'
+```
+so a bash line was born:
+```bash
+ini_buffer="$(print "%s" "$raw_buffer" | awk '/^\[.*\]$/{obj=$0}/=/{print obj $0}')"
+```
+
+Standardized INI Table Format
+--------------------------
+Next is to standardize the INI to a common syntax format:
+```
+[section]keyword=keyvale
+```
+
+An example INI file might look like this:
+```ini
+loneSetting=0
+
+[Network]
+DNS=1.1.1.1
+
+[Default]
+FirstDefaultKeyword=1
+
+```
+get turned into this:
+```ini
+[Default]loneSetting=0
+[Network]DNS=1.1.1.1
+[Default]FirstDefaultKeyword=1
+```
+
+Parsable AWK/SED/GREP Galore!
+=======
+With a common `[section]keyword=keyvalue`, it now becomes possible to work with INI line-records in a faster manner using `sed`, `awk` and `tail`.
+
+
 How To Use bash-ini-file
 ====
 Simply source the lone script file: `bash-ini-file.sh`
