@@ -1,7 +1,7 @@
 # bash-ini-file
-Extract keyvalues by its section/keyword from an [INI-format (v1.4)](https://cloanto.com/specs/ini/#escapesequences) file in bash.
+Extract any keyvalues by its section/keyword from an [INI-format (v1.4)](https://cloanto.com/specs/ini/#escapesequences) file in bash.
 
-You got an INI file, I've got the bash script to get your settings from.
+You got an INI file, I've got the bash script in which to get your settings from with.
 
 Works with:
 
@@ -11,9 +11,17 @@ Works with:
 * PHP configuration file
 * Windows .INI
 
-Treats no-section as '`[Default]`';  reads both sections together as one.
+Treats a no-section (any `keyword=keyvalue` before a `[section]`) as a '`[Default]`';  reads both no-section and `[Default]` together as `[Default]`.
 
-Also correctly finds the last keyword of the desired section before extracting its keyvalue, despite multiply-defined/multiple-reused section blocks.
+Also correctly finds the last keyvalue of the desired section/keyword before extracting its keyvalue, despite its multiply-defined/multiple-reused interspersed/alternating section blocks.
+
+How To Use bash-ini-file
+====
+Simply source the lone script file: `bash-ini-file.sh`
+and start calling APIs such as:
+
+| asdf | asdf | asdf |
+| asdf | asdf | asdf |
 
 Details
 =======
@@ -23,8 +31,7 @@ Supported version: 1.4 (2009)
 
 Features:
 
-* POSIX-compliant
-* Supports and ignores inline comment using semicolon '`;`', hashmark '`#`', and double-slash '`//`'
+* Supports and ignores inline comment using semicolon '`;`', hashmark '`#`'; But the double-slash '`//`' regex has been properly defined but not yet integrated as `bash` yet.  See Issue 1.
 * loads all settings into bash string (no variable array)
 * Treats no-section as '`[Default]`';  reads both sections together as one.
 * Check the section name and keyword name for valid character set.
@@ -37,8 +44,9 @@ A nice bash script can be either my `example-usage.sh` script or below:
 
 ```bash
 source bash-ini-parser.sh
-raw_data="$(cat "/etc/systemd/systemd.conf" | ini_file_read
-ini_kv_get "Default" "DNS"
+read -rd '' raw_data < <(cat "/etc/systemd/system/display-manager.service")
+read -rd '' ini_service_section < <(ini_file_read "$raw_data")
+ini_keyvalue_get "$ini_service_section" "Service" "ExecStart"
 # outputs the keyvalue
 ```
 
