@@ -32,7 +32,7 @@ Standardized INI Table Format
 --------------------------
 Next is to standardize the INI to a common syntax format:
 ```
-[section]keyword=keyvale
+[section]keyword=keyvalue
 ```
 
 An example INI file might look like this:
@@ -58,9 +58,9 @@ Parsable AWK/SED/GREP Galore!
 With a common `[section]keyword=keyvalue`, it now becomes possible to work with INI line-records in a faster manner using `sed`, `awk` and `tail`.
 
 
-How To Use bash-ini-file
+How To Use bash-ini-parser
 ====
-Simply source the lone script file: `bash-ini-file.sh`
+Simply source the lone script file: `bash-ini-parser.sh`
 and start calling APIs such as:
 
 | API | `$?` | `STDOUT` | Description |
@@ -129,7 +129,119 @@ Done.
 
 Unit Test
 =========
-`tests` subdirectory performs the comprehensive unit test, in case you tweaked it, this will find any errors of yours.
+The accompanied `tests` subdirectory performs the comprehensive unit testing, in case you have decided to tweaked it to your normative scenario; hopefully, this will find any errors of yours.
+
+To exercise the test, your modified `bash-ini-parser.sh must reside above the `tests` directory as all the unit tests will perform:
+
+```bash
+#!/bin/bash
+# Title: my script file
+
+source ../bash-ini-parser.sh
+
+...
+```
+
+Supreme Unit Testing
+---
+To start the global unit test, execute:
+
+```bash
+cd tests
+./test-all.sh
+```
+and the output is long, very long, very very long.
+
+Selective Unit Test
+---
+
+To perform a specific unit test, for example, `ini_keyvalue_get()`, execute:
+
+```console
+$ bash test-ini-keyvalue-get.sh 
+assert_keyvalue_get([Default]DNS=): pass # same keyword, 'Default' section
+assert_keyvalue_get([Resolve]DNS=): pass # same keyword, 'Resolve' section
+assert_keyvalue_get([Default]DNS=): pass # empty ini_file
+assert_keyvalue_get([Default]DNS=): pass # new line
+assert_keyvalue_get([Default]DNS=): pass # hash mark no-comment
+assert_keyvalue_get([Default]DNS=): pass # semicolon no-comment
+assert_keyvalue_get([Default]DNS=): pass # slash-slash no-comment
+assert_keyvalue_get([Default]DNS=): pass # hash mark comment
+assert_keyvalue_get([Default]DNS=): pass # semicolon comment
+assert_keyvalue_get([Default]DNS=): pass # slash-slash comment
+assert_keyvalue_get([NoSuchSection]DNS=): pass # same keyword, 'NoSuchSection' section
+assert_keyvalue_get([]=): pass # unused keyword
+assert_keyvalue_get([]DNS=): pass # unused keyword, 'no-section default
+assert_keyvalue_get([Resolve]DNS=): pass # unused keyword, 'Resolve' section
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unused keyword, noSuchSection
+assert_keyvalue_get([]=): pass # unused keyword
+assert_keyvalue_get([]DNS=): pass # unused keyword, 'no-section default
+assert_keyvalue_get([Resolve]DNS=): pass # unused keyword, 'Resolve' section
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unused keyword, noSuchSection
+assert_keyvalue_get([]=): pass # unused keyword
+assert_keyvalue_get([]DNS=): pass # unused keyword, 'no-section default
+assert_keyvalue_get([Default]FallbackDNS=): pass # standard
+assert_keyvalue_get([Resolve]DNS=): pass # incomplete but matching keyword, 'Resolve' section
+assert_keyvalue_get([Resolve]DNS_Server1=): pass # incomplete but matching keyword, 'Resolve' section, NULL answer
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unused keyword, noSuchSection
+assert_keyvalue_get([]=): pass # unused keyword
+assert_keyvalue_get([]DNS=): pass # unused keyword, 'no-section default
+assert_keyvalue_get([Gateway]Hidden_DNS_Master=): pass # unique section, underscored keyword
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unique section, unused keyword, noSuchSection
+assert_keyvalue_get([]=): pass # unused keyword
+assert_keyvalue_get([]DNS=): pass # unused keyword, 'no-section default
+assert_keyvalue_get([Resolve]DNS=): pass # keyword 2 of 2, 'Resolve' section
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unused keyword, noSuchSection
+assert_keyvalue_get([]=): pass # unused keyword
+assert_keyvalue_get([]DNS=): pass # unused keyword, 'no-section default
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unused keyword, noSuchSection
+assert_keyvalue_get([Default]FallbackDNS=): pass # standard
+assert_keyvalue_get([Resolve]DNS_Server1=): pass # standard
+assert_keyvalue_get([DifferentSection]DNS=): pass # standard
+assert_keyvalue_get([Resolve]DNS_Server2=): pass # standard
+assert_keyvalue_get([DifferentSection2]DNS_2=): pass # standard
+assert_keyvalue_get([Resolve]DNS=): pass # standard
+assert_keyvalue_get([]=): pass # unused keyword
+assert_keyvalue_get([]DNS=): pass # unused keyword, 'no-section default
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unused keyword, noSuchSection
+assert_keyvalue_get([Default]FallbackDNS=): pass # standard
+assert_keyvalue_get([Resolve]DNS_Server1=): pass # standard
+assert_keyvalue_get([DifferentSection]DNS=): pass # standard
+assert_keyvalue_get([Resolve]DNS_Server2=): pass # standard
+assert_keyvalue_get([DifferentSection2]DNS_2=): pass # standard
+assert_keyvalue_get([Resolve]DNS=): pass # standard
+assert_keyvalue_get([Gateway]Hidden_DNS_Master=): pass # standard
+assert_keyvalue_get([]=): pass # unused keyword
+assert_keyvalue_get([]DNS=): pass # unused keyword, 'no-section default
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unused keyword, noSuchSection
+assert_keyvalue_get([Default]FallbackDNS=): pass # standard
+assert_keyvalue_get([Resolve]DNS_Server1=): pass # standard
+assert_keyvalue_get([DifferentSection]DNS=): pass # standard
+assert_keyvalue_get([Resolve]DNS_Server2=): pass # standard
+assert_keyvalue_get([DifferentSection2]DNS_2=): pass # standard
+assert_keyvalue_get([Resolve]DNS=): pass # standard
+assert_keyvalue_get([Gateway]Hidden_DNS_Master=): pass # standard
+assert_keyvalue_get([Gateway]Hidden_DNS_Master2=): pass # standard
+assert_keyvalue_get([]=): pass # no section, no keyword
+assert_keyvalue_get([]DNS=): pass # no-section, unused keyword
+assert_keyvalue_get([NoSuchSection]DNS=): pass # unused section, unused keyword
+assert_keyvalue_get([Default]FallbackDNS=): pass # # inside double-quote
+assert_keyvalue_get([Resolve]DNS_Server1=): pass # ; inside double-quote
+assert_keyvalue_get([DifferentSection]DNS=): pass # // inside double-quote
+assert_keyvalue_get([Resolve]DNS_Server2=): pass # ; inside LHS double-quote
+assert_keyvalue_get([DifferentSection2]DNS_2=): pass # // inside LHS double-quote
+assert_keyvalue_get([Resolve]DNS=): pass # ; inside RHS double-quote
+assert_keyvalue_get([Gateway]Hidden_DNS_Master=): pass # # inside RHS double-quote
+assert_keyvalue_get([Gateway]Hidden_DNS_Master2=): pass # // inside RHS double-quote
+assert_keyvalue_get([Default]FallbackDNS=): pass # # inside double-quote and outside
+assert_keyvalue_get([Resolve]DNS_Server1=): pass # ; inside quote and outside
+assert_keyvalue_get([Resolve]DNS_Server2=): pass # ; inside LHS double-quote and outside
+assert_keyvalue_get([Resolve]DNS=): pass # ; inside RHS double-quote and outside
+assert_keyvalue_get([Gateway]Hidden_DNS_Master2=): failed # // inside RHS double-quote and outside
+  expected: '"78.78.78.78//"'
+  actual  : '"78.78.78.78//"  // inline '/' '/' RHS double-quote'
+```
+
 
 
 
