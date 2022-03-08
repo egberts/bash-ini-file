@@ -21,6 +21,8 @@ Simply source the lone script file: `bash-ini-file.sh`
 and start calling APIs such as:
 
 | asdf | asdf | asdf |
+| ---- | ---- | ---- |
+| asdf | asdf | asdf |
 | asdf | asdf | asdf |
 
 Details
