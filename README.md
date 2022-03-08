@@ -17,10 +17,27 @@ Treats a no-section (any `keyword=keyvalue` before a `[section]`) as a '`[Defaul
 
 Also correctly finds the last keyvalue of the desired section/keyword before extracting its keyvalue, despite its multiply-defined/multiple-reused interspersed/alternating section blocks.
 
+Details
+=======
+
+File format: .INI
+Supported version: 1.4 (2009)
+
+Features
+----
+Currently supported features are:
+
+* loads all settings into a multi-line bash string (no need for variable array)
+* Treats no-section as '`[Default]`';  reads both sections together as Default.
+* Check the section name and keyword name for valid character set.
+* Nested quotes also works alongside with inline comment (except for '//' inline comment support)
+* Supports and ignores inline comment using semicolon '`;`', hashmark '`#`'; But the double-slash '`//`' regex has been properly defined but not yet integrated as `bash` yet.  See [Issue 1](https://github.com/egberts/bash-ini-file/issues/1).
+* Some 30,000 keyvalue lookups per second, no it is more like 20/second; well, like performance really matters here anyway.
+
 HOW I DID THIS
 ==============
 
-The secret sauce is to convert the entire INI file into a parsable syntax format with one `awk`:
+The secret sauce is to convert the entire INI file into a parsable syntax format just with this one `awk` programming:
 
 ```awk
 /^\[.*\]$/{obj=$0}/=/{print obj $0}'
@@ -55,12 +72,14 @@ get turned into this:
 [Default]FirstDefaultKeyword=1
 ```
 
-Parsable AWK/SED/GREP Galore!
+Note:  Notice that we treated the 'no-section' as `[Default]`?
+
+Parsable Galore!
 =======
-With a common `[section]keyword=keyvalue`, it now becomes possible to work with INI line-records in a faster manner using `sed`, `awk` and `tail`.
+With the usage of a common `[section]keyword=keyvalue` format, it now becomes easily possible to work with INI line-records in a faster manner using `sed`, `awk` and `tail` or even `grep`.
 
 
-How To Use bash-ini-parser
+APIs, APIs, Lots of API; well, just a few.
 ====
 Simply source the lone script file: `bash-ini-parser.sh`
 and start calling APIs such as:
@@ -77,21 +96,6 @@ and start calling APIs such as:
 | `ini_keyword_extract` | `-` | multi-line | Extracts one or more INI records having matching keyword from an INI table |
 | `ini_keyvalue_get` | `-` | multi-line | Get the key value based on given section name and keyword name (most useful with `systemd`, `NetworkManager`. |
 | `ini_keyvalue_get_last` | `-` | string | Get the LAST key value encountered given a section name and a keyword name. (most useful if only interested by matched keyword for the last `keyword=keyvalue` to obtain its overridden keyvalue. |
-
-Details
-=======
-
-File format: .INI
-Supported version: 1.4 (2009)
-
-Features:
-
-* Supports and ignores inline comment using semicolon '`;`', hashmark '`#`'; But the double-slash '`//`' regex has been properly defined but not yet integrated as `bash` yet.  See [Issue 1](https://github.com/egberts/bash-ini-file/issues/1).
-* loads all settings into bash string (no variable array)
-* Treats no-section as '`[Default]`';  reads both sections together as one.
-* Check the section name and keyword name for valid character set.
-* Nested quotes also works alongside with inline comment (except for '//' inline comment support)
-* 30,000 keyvalue lookup per second.  (well, like performance really matters here anyway)
 
 Demo
 ====
@@ -133,7 +137,7 @@ Unit Test
 =========
 The accompanied `tests` subdirectory performs the comprehensive unit testing, in case you have decided to tweaked it to your normative scenario; hopefully, this will find any errors of yours.
 
-To exercise the test, your modified `bash-ini-parser.sh must reside above the `tests` directory as all the unit tests will perform:
+To exercise a specific unit test, your modified `bash-ini-parser.sh` must reside above the `tests` directory as all the unit tests will perform and find your modified script 'above':
 
 ```bash
 #!/bin/bash
