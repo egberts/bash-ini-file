@@ -20,10 +20,18 @@ How To Use bash-ini-file
 Simply source the lone script file: `bash-ini-file.sh`
 and start calling APIs such as:
 
-| asdf | asdf | asdf |
-| ---- | ---- | ---- |
-| asdf | asdf | asdf |
-| asdf | asdf | asdf |
+| API | `$?` | `STDOUT` | Description |
+| ---- | ---- | ---- | ---- |
+| `ini_read_file` | `-` | multi-line | Converts an INI-format file content into a variable containing an INI table |
+| `ini_section_name_normalize` | 0/1 | string | Normalize the section name into an acceptable form of INI-compliant name. |
+| `ini_section_list` | 0/1 | string | Outputs a list of section name(s) found in the INI table |
+| `ini_section_extract` | `-` | multi-line | Extract one or more INI table records having this matching 'section' name |
+| `ini_keyword_name_normalize` | 0/1 | string |  Normalize the keyword name into an acceptable form of INI-compliant name. |
+| `ini_keyword_valid` | 0/1 | `-` | Assert that the keyword is valid for use in a INI file. |
+| `ini_keyword_list` | 0/1 | string | Outputs a list of keyword name(s) found by a specified section in INI table |
+| `ini_keyword_extract` | `-` | multi-line | Extracts one or more INI records having matching keyword from an INI table |
+| `ini_keyvalue_get` | `-` | multi-line | Get the key value based on given section name and keyword name (most useful with `systemd`, `NetworkManager`. |
+| `ini_keyvalue_get_last` | `-` | string | Get the LAST key value encountered given a section name and a keyword name. (most useful if only interested by matched keyword for the last `keyword=keyvalue` to obtain its overridden keyvalue. |
 
 Details
 =======
