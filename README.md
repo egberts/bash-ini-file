@@ -86,7 +86,7 @@ Supported version: 1.4 (2009)
 
 Features:
 
-* Supports and ignores inline comment using semicolon '`;`', hashmark '`#`'; But the double-slash '`//`' regex has been properly defined but not yet integrated as `bash` yet.  See Issue 1.
+* Supports and ignores inline comment using semicolon '`;`', hashmark '`#`'; But the double-slash '`//`' regex has been properly defined but not yet integrated as `bash` yet.  See [Issue 1](https://github.com/egberts/bash-ini-file/issues/1).
 * loads all settings into bash string (no variable array)
 * Treats no-section as '`[Default]`';  reads both sections together as one.
 * Check the section name and keyword name for valid character set.
