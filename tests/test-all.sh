@@ -11,7 +11,6 @@
 . ./test-ini-keyword-valid.sh
 . ./test-ini-keyword-list.sh
 . ./test-ini-keyvalue-get.sh
-. ./test-ini-kv-get-last.sh
 echo ""
 
 echo "${BASH_SOURCE[0]}: Done."
