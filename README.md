@@ -8,6 +8,7 @@ You got an INI file, I've got the bash script in which to get your settings from
 Works with:
 
 * systemd configuration file
+* Python configuration file
 * NetworkManager configuration file
 * ifup/down configuration file
 * PHP configuration file
